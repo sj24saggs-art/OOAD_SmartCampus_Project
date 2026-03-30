@@ -1,5 +1,3 @@
-# OOAD_SmartCampus_Project
-
 # Smart Campus Facility Booking & Maintenance System
 
 ## Project Overview
