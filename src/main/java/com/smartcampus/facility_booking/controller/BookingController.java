@@ -1,6 +1,8 @@
 package com.smartcampus.facility_booking.controller;
 
 import com.smartcampus.facility_booking.models.Booking;
+import com.smartcampus.facility_booking.models.MaintenanceRequest;
+import com.smartcampus.facility_booking.repository.MaintenanceRequestRepository;
 import com.smartcampus.facility_booking.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +34,13 @@ public class BookingController {
     @PutMapping("/modify/{id}")
     public Booking modify(@PathVariable Long id, @RequestBody Booking updatedBooking) {
         return bookingService.updateBooking(id, updatedBooking);
+    }
+
+    @Autowired
+    private MaintenanceRequestRepository maintenanceRepo;
+
+    @PostMapping("/maintenance/report")
+    public MaintenanceRequest reportIssue(@RequestBody MaintenanceRequest request) {
+    return maintenanceRepo.save(request);
     }
 }
