@@ -3,75 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartCampus | System Admin</title>
+    <title>SmartCampus | System Administration</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
             --primary: #2563eb; --sidebar: #0f172a; --bg: #f8fafc; 
             --text-main: #0f172a; --text-muted: #64748b; --white: #ffffff; --border: #e2e8f0;
+            --success: #16a34a; --warning: #d97706; --danger: #dc2626;
         }
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
         body { background-color: var(--bg); color: var(--text-main); padding: 2.5rem; }
-        .header { margin-bottom: 2rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 2rem; }
-        .stat-card { background: var(--white); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); }
-        .stat-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
-        .stat-value { font-size: 1.8rem; font-weight: 600; }
         
-        .card { background: var(--white); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .header { margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .header h1 { font-size: 1.8rem; font-weight: 600; }
+        .header p { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+
+        /* Stats Grid for Analytics Use Case */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 2rem; }
+        .stat-card { background: var(--white); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .stat-label { color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .stat-value { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        
+        /* Table Styling */
+        .card { background: var(--white); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.85rem; border-bottom: 2px solid #f1f5f9; }
-        td { padding: 14px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
-        .badge { padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; }
-        .APPROVED { color: #16a34a; background: #f0fdf4; }
-        .PENDING { color: #d97706; background: #fffbeb; }
-        .REJECTED { color: #dc2626; background: #fef2f2; }
+        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; border-bottom: 2px solid var(--bg); text-transform: uppercase; }
+        td { padding: 14px 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        
+        /* Dynamic Badges for Status */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .APPROVED { background: #f0fdf4; color: var(--success); border: 1px solid #bbf7d0; }
+        .PENDING { background: #fffbeb; color: var(--warning); border: 1px solid #fef3c7; }
+        .REJECTED { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
+        
+        .event-type-tag { font-size: 0.75rem; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #475569; font-weight: 600; }
     </style>
 </head>
 <body>
+
     <div class="header">
         <h1>System Admin Dashboard</h1>
+        <p>Sai Roshini Kolla | SRN: PES1UG23CS500</p>
     </div>
 
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-label">Total Transactions</div>
-            <div class="stat-value" th:text="${totalRequests}">0</div>
+            <div class="stat-label">Total Logs Recorded</div>
+            <div class="stat-value">
+                <i data-lucide="layers" style="color: var(--primary);"></i>
+                <span th:text="${totalRequests}">0</span>
+            </div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">System Health</div>
-            <div class="stat-value" style="color: #10b981;">Operational</div>
+            <div class="stat-label">System Status</div>
+            <div class="stat-value" style="color: var(--success);">
+                <i data-lucide="activity"></i> Operational
+            </div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Database Status</div>
-            <div class="stat-value" style="color: var(--primary);">Connected</div>
+            <div class="stat-label">Database Engine</div>
+            <div class="stat-value" style="color: var(--primary);">
+                <i data-lucide="database"></i> MySQL
+            </div>
         </div>
     </div>
 
     <div class="card">
-        <h3 style="margin-bottom:1rem;"><i data-lucide="database" style="width:18px; vertical-align:text-bottom;"></i> Global Records Oversight</h3>
+        <div class="card-header">
+            <h3><i data-lucide="list" style="vertical-align: middle; margin-right: 8px;"></i> Global Transaction Audit Log</h3>
+        </div>
         <table>
             <thead>
                 <tr>
                     <th>Log ID</th>
-                    <th>Facility Reference</th>
-                    <th>Timestamp</th>
+                    <th>Facility</th>
+                    <th>Event Category</th>
+                    <th>Scheduled Timing</th>
                     <th>Current Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="b : ${allBookings}">
-                    <td th:text="${'#SYS-' + b.id}"></td>
-                    <td th:text="${b.bookingReference}"></td>
-                    <td th:text="${#temporals.format(b.startTime, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${'#SYS-' + b.id}" style="font-family: monospace; font-weight: 600;"></td>
+                    <td><strong th:text="${b.bookingReference}"></strong></td>
+                    <td><span class="event-type-tag" th:text="${b.eventType}"></span></td>
+                    <td>
+                        <span th:text="${#temporals.format(b.startTime, 'dd MMM, HH:mm')}"></span>
+                        <span style="color: var(--text-muted);"> to </span>
+                        <span th:text="${#temporals.format(b.endTime, 'HH:mm')}"></span>
+                    </td>
                     <td>
                         <span th:class="'badge ' + ${b.status}" th:text="${b.status}"></span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(allBookings)}">
+                    <td colspan="5" style="text-align:center; padding: 3rem; color: var(--text-muted);">
+                        <i data-lucide="database-zap" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>No transactions found. System is currently in a "Fresh Start" state.</p>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <script>lucide.createIcons();</script>
+
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

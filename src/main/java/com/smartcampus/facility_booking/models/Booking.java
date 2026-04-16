@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings")
 public class Booking {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,14 +13,13 @@ public class Booking {
     private String bookingReference; 
     private String eventType;        
     private LocalDateTime startTime;
-    private LocalDateTime endTime; // New field for time-slot management
+    private LocalDateTime endTime; 
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status = BookingStatus.PENDING;
 
     public enum BookingStatus { PENDING, APPROVED, REJECTED }
 
-    // Setters and Getters
     public void setId(Long id) { this.id = id; }
     public Long getId() { return id; }
     public String getBookingReference() { return bookingReference; }
