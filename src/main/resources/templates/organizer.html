@@ -2,99 +2,103 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartCampus | Event Organizer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --primary: #2563eb; --primary-hover: #1d4ed8; --bg: #f8fafc; --sidebar: #1e293b;
-            --text-main: #0f172a; --text-muted: #64748b; --white: #ffffff; --border: #e2e8f0;
-            --danger: #ef4444; --danger-hover: #dc2626;
-        }
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-        body { background-color: var(--bg); color: var(--text-main); padding: 2.5rem; }
-        .header { margin-bottom: 2rem; }
-        .card { background: var(--white); border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border: 1px solid var(--border); }
-        
-        /* Form Styling */
-        .form-group { display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px; margin-top: 15px; }
-        input { padding: 10px; border: 1px solid var(--border); border-radius: 6px; outline: none; }
-        button.btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        button.btn-primary:hover { background: var(--primary-hover); }
-        
-        /* Table Styling */
+        :root { --primary: #2563eb; --bg: #f8fafc; --white: #ffffff; --border: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 2rem; margin: 0; }
+        .card { background: var(--white); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 1rem; align-items: end; }
+        label { font-size: 0.75rem; font-weight: 600; color: #64748b; margin-bottom: 4px; display: block; }
+        input { padding: 10px; border: 1px solid var(--border); border-radius: 6px; width: 100%; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.85rem; border-bottom: 2px solid #f1f5f9; text-transform: uppercase; }
-        td { padding: 16px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
-        
-        /* Status Badges */
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
-        .PENDING { background: #fef3c7; color: #92400e; }
-        .APPROVED { background: #dcfce7; color: #166534; }
-        .REJECTED { background: #fee2e2; color: #991b1b; }
-
-        /* Delete Button */
-        .btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; font-size: 0.85rem; }
-        .btn-delete:hover { color: var(--danger-hover); }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
+        .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .PENDING { background: #fffbeb; color: #b45309; }
+        .APPROVED { background: #f0fdf4; color: #16a34a; }
+        .REJECTED { background: #fef2f2; color: #dc2626; }
     </style>
 </head>
 <body>
-    <div class="header">
+    <div class="container">
         <h1>Event Organizer Dashboard</h1>
-        <p>Shivani J | SRN: PES1UG23CS549</p>
-    </div>
+        <p>Shivani J | PES1UG23CS549</p>
 
-    <div class="card">
-        <h3>New Booking Request</h3>
-        <form th:action="@{/organizer/book}" method="post" class="form-group">
-            <input type="text" name="bookingReference" placeholder="Facility Name (e.g. AUDI_01)" required>
-            <input type="datetime-local" name="startTime" required>
-            <button type="submit" class="btn-primary">Submit Request</button>
-        </form>
-    </div>
+        <div class="card">
+            <h3>New Booking Request</h3>
+            <form th:action="@{/organizer/book}" method="post" class="form-grid">
+                <div>
+                    <label>Facility Name</label>
+                    <input type="text" name="bookingReference" placeholder="e.g. AUDI_01" required>
+                </div>
+                <div>
+                    <label>Event Type</label>
+                    <input type="text" name="eventType" placeholder="e.g. Lab Exam" required>
+                </div>
+                <div>
+                    <label>Start Time</label>
+                    <input type="datetime-local" name="startTime" required>
+                </div>
+                <div>
+                    <label>End Time</label>
+                    <input type="datetime-local" name="endTime" required>
+                </div>
+                <button type="submit">Submit Request</button>
+            </form>
+        </div>
 
-    <div class="card">
-        <h3>My Current Bookings</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Facility</th>
-                    <th>Date & Time</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="b : ${bookings}">
-                    <td th:text="${'#' + b.id}"></td>
-                    <td><strong th:text="${b.bookingReference}"></strong></td>
-                    <td th:text="${#temporals.format(b.startTime, 'dd-MM-yyyy HH:mm')}"></td>
-                    <td>
-                        <span th:class="'badge ' + ${b.status}" th:text="${b.status}"></span>
-                    </td>
-                    <td>
-                        <form th:action="@{/organizer/delete/{id}(id=${b.id})}" method="post" 
-                              onsubmit="return confirm('Are you sure you want to remove this booking?');">
-                            <button type="submit" class="btn-delete">
-                                <i data-lucide="trash-2" style="width:16px;"></i> Remove
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(bookings)}">
-                    <td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">
-                        No bookings found. Start by submitting a new request above!
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="card">
+            <h3>My Current Bookings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Facility</th>
+                        <th>Event Type</th>
+                        <th>Timing</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="b : ${bookings}">
+                        <td><strong th:text="${b.bookingReference}"></strong></td>
+                        <td th:text="${b.eventType}"></td>
+                        <td>
+                            <span th:text="${#temporals.format(b.startTime, 'dd-MM HH:mm')}"></span> - 
+                            <span th:text="${#temporals.format(b.endTime, 'HH:mm')}"></span>
+                        </td>
+                        <td><span th:class="'badge ' + ${b.status}" th:text="${b.status}"></span></td>
+                        <td>
+                            <form th:action="@{/organizer/delete/{id}(id=${b.id})}" method="post">
+                                <button type="submit" style="background:none; color:#ef4444; padding:0; cursor:pointer; font-weight:600; border:none;">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for error message from controller
+            const error = "[[${error}]]";
+            const success = "[[${success}]]";
+            
+            // Small timeout to ensure the browser has painted the UI
+            setTimeout(() => {
+                if (error && error !== "null" && error !== "") {
+                    alert(error);
+                }
+                if (success && success !== "null" && success !== "") {
+                    alert(success);
+                }
+            }, 100);
+        });
     </script>
 </body>
 </html>

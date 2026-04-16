@@ -2,53 +2,36 @@ package com.smartcampus.facility_booking.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "bookings")
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String bookingReference;
-
+    private String bookingReference; 
+    private String eventType;        
     private LocalDateTime startTime;
-    private LocalDateTime endTime;
-
-    private String timeSlot;
+    private LocalDateTime endTime; // New field for time-slot management
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status;
+    private BookingStatus status = BookingStatus.PENDING;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User organizer;
+    public enum BookingStatus { PENDING, APPROVED, REJECTED }
 
-    @ManyToOne
-    @JoinColumn(name = "facility_id")
-    private Facility facility;
-
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.status == null) {
-            this.status = BookingStatus.PENDING;
-        }
-    }
-
-    /**
-     * Moving the Enum inside the class and making it PUBLIC
-     * allows the .controller package to access the status types.
-     */
-    public enum BookingStatus {
-        PENDING, APPROVED, REJECTED, CANCELLED, COMPLETED
-    }
+    // Setters and Getters
+    public void setId(Long id) { this.id = id; }
+    public Long getId() { return id; }
+    public String getBookingReference() { return bookingReference; }
+    public void setBookingReference(String br) { this.bookingReference = br; }
+    public String getEventType() { return eventType; }
+    public void setEventType(String et) { this.eventType = et; }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime st) { this.startTime = st; }
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime et) { this.endTime = et; }
+    public BookingStatus getStatus() { return status; }
+    public void setStatus(BookingStatus s) { this.status = s; }
 }

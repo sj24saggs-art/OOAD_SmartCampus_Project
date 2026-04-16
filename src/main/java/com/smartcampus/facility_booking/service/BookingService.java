@@ -12,31 +12,36 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
-    public Booking requestBooking(Booking booking) {
-        booking.setStatus(Booking.BookingStatus.PENDING); 
-        return bookingRepository.save(booking);
-    }
-
     public List<Booking> getMyBookings() {
         return bookingRepository.findAll();
     }
 
-    public void cancelBooking(Long id) {
-        bookingRepository.deleteById(id);
-    }
-
-    public Booking updateBooking(Long id, Booking updatedBooking) {
-        return bookingRepository.findById(id)
-            .map(existingBooking -> {
-                // This is the fix: Instead of calling undefined getters, 
-                // we save the whole updated object but keep the original ID.
-                updatedBooking.setId(id); 
-                updatedBooking.setStatus(Booking.BookingStatus.PENDING);
-                return bookingRepository.save(updatedBooking);
-            }).orElseThrow(() -> new RuntimeException("Booking not found"));
-    }
-
     public void deleteBooking(Long id) {
         bookingRepository.deleteById(id);
+    }
+
+    public String requestBooking(Booking newBooking) {
+        // Validate that end time is after start time
+        if (newBooking.getEndTime().isBefore(newBooking.getStartTime())) {
+            return "End time must be after start time.";
+        }
+
+        List<Booking> all = bookingRepository.findAll();
+        for (Booking existing : all) {
+            // Only check conflicts for the same facility that aren't rejected
+            if (existing.getBookingReference().equalsIgnoreCase(newBooking.getBookingReference()) && 
+                existing.getStatus() != Booking.BookingStatus.REJECTED) {
+                
+                // Logic: (StartA < EndB) and (EndA > StartB) means they overlap 
+                if (newBooking.getStartTime().isBefore(existing.getEndTime()) && 
+                    newBooking.getEndTime().isAfter(existing.getStartTime())) {
+                    return "CONFLICT";
+                }
+            }
+        }
+        
+        newBooking.setStatus(Booking.BookingStatus.PENDING);
+        bookingRepository.save(newBooking);
+        return "SUCCESS";
     }
 }
