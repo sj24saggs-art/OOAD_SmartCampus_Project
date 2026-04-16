@@ -65,4 +65,11 @@ public class BookingController {
         maintenanceRepo.save(request);
         return "redirect:/organizer/dashboard";
     }
+
+    @PostMapping("/delete/{id}")
+    public String deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBooking(id);
+        // MVC Redirect: Refreshes the view to show the event is removed
+        return "redirect:/organizer/dashboard";
+}
 }

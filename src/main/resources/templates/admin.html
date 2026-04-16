@@ -2,43 +2,77 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartCampus | System Admin</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #2563eb; --sidebar: #0f172a; --bg: #f8fafc; 
+            --text-main: #0f172a; --text-muted: #64748b; --white: #ffffff; --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: var(--text-main); padding: 2.5rem; }
+        .header { margin-bottom: 2rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 2rem; }
+        .stat-card { background: var(--white); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); }
+        .stat-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
+        .stat-value { font-size: 1.8rem; font-weight: 600; }
+        
+        .card { background: var(--white); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.85rem; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 14px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+        .badge { padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; }
+        .APPROVED { color: #16a34a; background: #f0fdf4; }
+        .PENDING { color: #d97706; background: #fffbeb; }
+        .REJECTED { color: #dc2626; background: #fef2f2; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h2>System Administration</h2>
-        
-        <div class="stats-grid" style="display: flex; gap: 20px;">
-            <div class="card">
-                <h4>Total System Requests</h4>
-                <p style="font-size: 24px; font-weight: bold;" th:text="${totalRequests}">0</p>
-            </div>
-            <div class="card">
-                <h4>System Status</h4>
-                <p style="color: green; font-weight: bold;">OPERATIONAL</p>
-            </div>
-        </div>
+    <div class="header">
+        <h1>System Admin Dashboard</h1>
+        <p>Sai Roshini Kolla | SRN: PES1UG23CS500</p>
+    </div>
 
-        <div class="card">
-            <h3>Global Booking Oversight</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Reference</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="b : ${allBookings}">
-                        <td th:text="${b.id}"></td>
-                        <td th:text="${b.bookingReference}"></td>
-                        <td th:text="${b.status}"></td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Transactions</div>
+            <div class="stat-value" th:text="${totalRequests}">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">System Health</div>
+            <div class="stat-value" style="color: #10b981;">Operational</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Database Status</div>
+            <div class="stat-value" style="color: var(--primary);">Connected</div>
         </div>
     </div>
+
+    <div class="card">
+        <h3 style="margin-bottom:1rem;"><i data-lucide="database" style="width:18px; vertical-align:text-bottom;"></i> Global Records Oversight</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Log ID</th>
+                    <th>Facility Reference</th>
+                    <th>Timestamp</th>
+                    <th>Current Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="b : ${allBookings}">
+                    <td th:text="${'#SYS-' + b.id}"></td>
+                    <td th:text="${b.bookingReference}"></td>
+                    <td th:text="${#temporals.format(b.startTime, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td>
+                        <span th:class="'badge ' + ${b.status}" th:text="${b.status}"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>lucide.createIcons();</script>
 </body>
 </html>

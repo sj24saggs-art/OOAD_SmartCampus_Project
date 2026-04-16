@@ -35,4 +35,8 @@ public class BookingService {
                 return bookingRepository.save(updatedBooking);
             }).orElseThrow(() -> new RuntimeException("Booking not found"));
     }
+
+    public void deleteBooking(Long id) {
+        bookingRepository.deleteById(id);
+    }
 }

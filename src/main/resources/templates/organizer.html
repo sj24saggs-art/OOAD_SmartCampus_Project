@@ -2,43 +2,99 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartCampus | Event Organizer</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #2563eb; --primary-hover: #1d4ed8; --bg: #f8fafc; --sidebar: #1e293b;
+            --text-main: #0f172a; --text-muted: #64748b; --white: #ffffff; --border: #e2e8f0;
+            --danger: #ef4444; --danger-hover: #dc2626;
+        }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: var(--text-main); padding: 2.5rem; }
+        .header { margin-bottom: 2rem; }
+        .card { background: var(--white); border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border: 1px solid var(--border); }
+        
+        /* Form Styling */
+        .form-group { display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px; margin-top: 15px; }
+        input { padding: 10px; border: 1px solid var(--border); border-radius: 6px; outline: none; }
+        button.btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        button.btn-primary:hover { background: var(--primary-hover); }
+        
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.85rem; border-bottom: 2px solid #f1f5f9; text-transform: uppercase; }
+        td { padding: 16px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
+        
+        /* Status Badges */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        .PENDING { background: #fef3c7; color: #92400e; }
+        .APPROVED { background: #dcfce7; color: #166534; }
+        .REJECTED { background: #fee2e2; color: #991b1b; }
+
+        /* Delete Button */
+        .btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; font-size: 0.85rem; }
+        .btn-delete:hover { color: var(--danger-hover); }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Event Organizer Dashboard</h2>
-        
-        <div class="card">
-            <h3>Request New Facility</h3>
-            <form th:action="@{/organizer/book}" method="post">
-                <input type="text" name="bookingReference" placeholder="Facility Name" required>
-                <input type="datetime-local" name="startTime" required>
-                <button type="submit" class="btn-primary">Submit Request</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h3>My Bookings</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Facility</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="b : ${bookings}">
-                        <td th:text="${b.id}"></td>
-                        <td th:text="${b.bookingReference}"></td>
-                        <td th:text="${#temporals.format(b.startTime, 'dd-MM-yyyy HH:mm')}"></td>
-                        <td><span th:class="${b.status}" th:text="${b.status}"></span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="header">
+        <h1>Event Organizer Dashboard</h1>
+        <p>Shivani J | SRN: PES1UG23CS549</p>
     </div>
+
+    <div class="card">
+        <h3>New Booking Request</h3>
+        <form th:action="@{/organizer/book}" method="post" class="form-group">
+            <input type="text" name="bookingReference" placeholder="Facility Name (e.g. AUDI_01)" required>
+            <input type="datetime-local" name="startTime" required>
+            <button type="submit" class="btn-primary">Submit Request</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>My Current Bookings</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Facility</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="b : ${bookings}">
+                    <td th:text="${'#' + b.id}"></td>
+                    <td><strong th:text="${b.bookingReference}"></strong></td>
+                    <td th:text="${#temporals.format(b.startTime, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td>
+                        <span th:class="'badge ' + ${b.status}" th:text="${b.status}"></span>
+                    </td>
+                    <td>
+                        <form th:action="@{/organizer/delete/{id}(id=${b.id})}" method="post" 
+                              onsubmit="return confirm('Are you sure you want to remove this booking?');">
+                            <button type="submit" class="btn-delete">
+                                <i data-lucide="trash-2" style="width:16px;"></i> Remove
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(bookings)}">
+                    <td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">
+                        No bookings found. Start by submitting a new request above!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>
