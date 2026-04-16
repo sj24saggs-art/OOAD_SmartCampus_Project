@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartCampus | Event Organizer</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h2>Event Organizer Dashboard</h2>
+        
+        <div class="card">
+            <h3>Request New Facility</h3>
+            <form th:action="@{/organizer/book}" method="post">
+                <input type="text" name="bookingReference" placeholder="Facility Name" required>
+                <input type="datetime-local" name="startTime" required>
+                <button type="submit" class="btn-primary">Submit Request</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>My Bookings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Facility</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="b : ${bookings}">
+                        <td th:text="${b.id}"></td>
+                        <td th:text="${b.bookingReference}"></td>
+                        <td th:text="${#temporals.format(b.startTime, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td><span th:class="${b.status}" th:text="${b.status}"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

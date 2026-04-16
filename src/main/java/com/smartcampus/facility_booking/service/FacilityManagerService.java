@@ -1,5 +1,6 @@
 package com.smartcampus.facility_booking.service;
 
+import com.smartcampus.facility_booking.models.FacilityAvailability;
 import com.smartcampus.facility_booking.models.Booking;
 import com.smartcampus.facility_booking.models.Facility;
 import com.smartcampus.facility_booking.repository.BookingRepository;
@@ -22,7 +23,9 @@ public class FacilityManagerService {
     public Booking approveBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        booking.setStatus("APPROVED");
+        
+        // FIX: Using the Enum instead of a String
+        booking.setStatus(Booking.BookingStatus.APPROVED);
         return bookingRepository.save(booking);
     }
 
@@ -30,7 +33,9 @@ public class FacilityManagerService {
     public Booking rejectBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        booking.setStatus("REJECTED");
+        
+        // FIX: Using the Enum instead of a String
+        booking.setStatus(Booking.BookingStatus.REJECTED);
         return bookingRepository.save(booking);
     }
 
@@ -38,16 +43,18 @@ public class FacilityManagerService {
     public Facility updateFacilityStatus(Long facilityId, String status) {
         Facility facility = facilityRepository.findById(facilityId)
                 .orElseThrow(() -> new RuntimeException("Facility not found"));
-        facility.setStatus(status);
-        return facilityRepository.save(facility);
-    }
+    
+    // FIX: Match the variable name 'availability' in Facility.java
+    // And convert the String input to the Enum type
+    facility.setAvailability(FacilityAvailability.valueOf(status.toUpperCase()));
+    
+    return facilityRepository.save(facility);
+}
 
-    // View all bookings
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
-    // View all facilities
     public List<Facility> getAllFacilities() {
         return facilityRepository.findAll();
     }

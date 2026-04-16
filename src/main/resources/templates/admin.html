@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartCampus | System Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h2>System Administration</h2>
+        
+        <div class="stats-grid" style="display: flex; gap: 20px;">
+            <div class="card">
+                <h4>Total System Requests</h4>
+                <p style="font-size: 24px; font-weight: bold;" th:text="${totalRequests}">0</p>
+            </div>
+            <div class="card">
+                <h4>System Status</h4>
+                <p style="color: green; font-weight: bold;">OPERATIONAL</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Global Booking Oversight</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Reference</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="b : ${allBookings}">
+                        <td th:text="${b.id}"></td>
+                        <td th:text="${b.bookingReference}"></td>
+                        <td th:text="${b.status}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

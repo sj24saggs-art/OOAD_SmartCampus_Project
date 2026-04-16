@@ -1,16 +1,24 @@
-package service;
+package com.smartcampus.facility_booking.service;
 
-import model.Booking;
+import com.smartcampus.facility_booking.models.Booking;
+import com.smartcampus.facility_booking.repository.BookingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
+@Service
 public class ApprovalService {
+    @Autowired
+    private BookingRepository bookingRepository;
 
-    public void approveBooking(Booking booking) {
-        booking.setStatus("Approved");
-        System.out.println("Booking " + booking.getBookingId() + " approved.");
+    public List<Booking> getPendingBookings() {
+        return bookingRepository.findAll(); 
     }
 
-    public void rejectBooking(Booking booking) {
-        booking.setStatus("Rejected");
-        System.out.println("Booking " + booking.getBookingId() + " rejected.");
+    public void approveBooking(Long id) {
+        bookingRepository.findById(id).ifPresent(b -> {
+            b.setStatus(Booking.BookingStatus.APPROVED);
+            bookingRepository.save(b);
+        });
     }
 }

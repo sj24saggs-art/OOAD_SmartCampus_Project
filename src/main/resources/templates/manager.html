@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartCampus | Facility Manager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h2>Facility Manager Approvals</h2>
+        
+        <div class="card">
+            <h3>Pending Queue</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ref</th>
+                        <th>Facility</th>
+                        <th>Requested Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="b : ${pendingBookings}">
+                        <td th:text="${'REF-' + b.id}"></td>
+                        <td th:text="${b.bookingReference}"></td>
+                        <td th:text="${#temporals.format(b.startTime, 'dd-MM-yyyy')}"></td>
+                        <td>
+                            <form th:action="@{/api/manager/approve/{id}(id=${b.id})}" method="post">
+                                <input type="hidden" name="_method" value="put" />
+                                <button type="submit" class="btn-approve">Approve</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(pendingBookings)}">
+                        <td colspan="4">No pending requests to process.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

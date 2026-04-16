@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCampus | Portal Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #2563eb; --sidebar: #1e293b;
+            --bg: #f8fafc; --white: #ffffff; --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--bg); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        
+        .login-card { 
+            background: var(--white); 
+            padding: 2.5rem; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            width: 100%; 
+            max-width: 450px; 
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        
+        .logo { 
+            font-weight: 600; font-size: 1.5rem; color: var(--sidebar); 
+            margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px; 
+        }
+        
+        h1 { font-size: 1.25rem; margin-bottom: 2rem; color: #64748b; }
+        
+        .role-options { display: flex; flex-direction: column; gap: 12px; }
+        
+        .role-btn {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; border-radius: 10px; border: 1px solid var(--border);
+            background: var(--white); cursor: pointer; text-decoration: none;
+            color: var(--sidebar); font-weight: 600; transition: all 0.2s ease;
+        }
+        
+        .role-btn:hover { 
+            border-color: var(--primary); background: #eff6ff; color: var(--primary); 
+            transform: translateY(-2px);
+        }
+
+        .icon-box { display: flex; align-items: center; gap: 12px; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo"><i data-lucide="layout-dashboard"></i> SmartCampus</div>
+        <h1>Select Your Access Role</h1>
+        
+        <div class="role-options">
+            <a href="/organizer/dashboard" class="role-btn">
+                <div class="icon-box"><i data-lucide="calendar"></i> Event Organizer</div>
+                <i data-lucide="chevron-right"></i>
+            </a>
+            
+            <a href="/manager/approvals" class="role-btn">
+                <div class="icon-box"><i data-lucide="shield-check"></i> Facility Manager</div>
+                <i data-lucide="chevron-right"></i>
+            </a>
+            
+            <a href="/admin/system" class="role-btn">
+                <div class="icon-box"><i data-lucide="settings"></i> System Admin</div>
+                <i data-lucide="chevron-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
